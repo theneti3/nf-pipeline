@@ -1,5 +1,6 @@
 // we can share here
 // bash line: nextflow run main.nf  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
+// run from github: nextflow run theneti3/nf-pipeline  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
 
 params.reference = null
 params.data = null
@@ -27,7 +28,10 @@ workflow {
     def ch_input = channel.fromFilePairs(params.data) | view
         
     fastp(ch_input).sample_ID  
-        | view      
+        | view    
+
+    fastqc(ch_input)
+        | view  
 }
 // process to fetch ref seq
 process fetch_reference {
